@@ -176,7 +176,10 @@ employment <- get_sig(employment)
 png(filename = "employment.png", width = 900, height = 500)
 employment %>%
   filter(gamedev != 0 & value != "Base") %>%
-  mutate(value = c("Fully employed", "Freelancer", "Student", "Self-employed", "Partially employed", "Working student", "Other", "Retired")) %>%
+  mutate(value = replace(value, value == "Fully employed by a company / organization", "Fully employed")) %>%
+  mutate(value = replace(value, value == "Freelancer (a person pursuing a profession without a long-term commitment to any one employer)", "Freelancer")) %>%
+  mutate(value = replace(value, value == "Self-employed (a person earning income directly from their own business, trade, or profession)", "Self-employed")) %>%
+  mutate(value = replace(value, value == "Partially employed by a company / organization ", "Partially employed")) %>%
   ggplot(aes(x = reorder(value, gamedev), y = gamedev, fill = sig)) +
   geom_col() +
   coord_flip() +
@@ -651,3 +654,4 @@ lifestyle_pet %>%
         #axis.text.x = element_text(angle = 90, hjust = 1),
         legend.position = "none")
 dev.off()
+
